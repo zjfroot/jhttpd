@@ -32,9 +32,14 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
      */
     private final StringBuilder buf = new StringBuilder();
 
-    private String htdocs = "/home/jifzh/jifeng/pj/jhttpd/wwwhome";
+    //private String htdocs = "/home/jifzh/jifeng/pj/jhttpd/wwwhome";
+
+    private String htdocs = "/Users/jifeng/Sites";
+
 
     private String contentType;
+
+    File requestedFile;
 
     @Override
     public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
@@ -59,7 +64,7 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
 
             HttpResponseStatus statusCode;
 
-            File requestedFile = new File(htdocs + requestFileName);
+            requestedFile = new File(htdocs + requestFileName);
 
             if(!requestedFile.exists()){
                 statusCode = NOT_FOUND;
@@ -119,10 +124,10 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
         // Build the response object.
         HttpResponse response = new DefaultHttpResponse(HTTP_1_1, statusCode);
 
-        if(contentType.equals("text/html")){
-            StringBuilder fileContentBuffer;
+        if(contentType.equals("text/html") || contentType.equals("text/plain")){
 
-            
+
+            buf.append(FileUtil.readFile(requestedFile));
         }
 
 
@@ -183,6 +188,6 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
         else if (path.endsWith(".jpg") || path.endsWith(".jpeg"))
             return "image/jpeg";
         else
-            return "text/plain";
+            return "unknown";
     }
 }
