@@ -6,13 +6,10 @@ import static org.jboss.netty.handler.codec.http.HttpResponseStatus.*;
 import static org.jboss.netty.handler.codec.http.HttpVersion.*;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.buffer.ChannelBufferOutputStream;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
@@ -60,13 +57,17 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
             Logger.log("REQUEST_URI: " + request.getUri());
             
 
-            String requestFileName = request.getUri();
+            String requestedFileName = request.getUri();
 
-            contentType = guessContentType(requestFileName);
+            /*if(requestedFileName.equals("/test")){
+                Thread.sleep(10000);
+            }*/
+
+            contentType = guessContentType(requestedFileName);
 
             HttpResponseStatus statusCode;
 
-            requestedFile = new File(htdocs + requestFileName);
+            requestedFile = new File(htdocs + requestedFileName);
 
             if(!requestedFile.exists()){
                 statusCode = NOT_FOUND;
