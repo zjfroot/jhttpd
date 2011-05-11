@@ -50,14 +50,18 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
                 send100Continue(e);
             }
 
+            //clear the buf
+
             buf.setLength(0);
+
+            /*buf.setLength(0);
             buf.append("WELCOME TO THE jhttpd WEB SERVER\r\n");
             buf.append("===================================\r\n");
 
             buf.append("VERSION: " + request.getProtocolVersion() + "\r\n");
             buf.append("HOSTNAME: " + getHost(request, "unknown") + "\r\n");
             buf.append("REQUEST_URI: " + request.getUri() + "\r\n\r\n");
-
+*/
             String requestFileName = request.getUri();
 
             contentType = guessContentType(requestFileName);
@@ -79,28 +83,28 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
 
 
 
-            for (Map.Entry<String, String> h : request.getHeaders()) {
+            /*for (Map.Entry<String, String> h : request.getHeaders()) {
                 buf.append("HEADER: " + h.getKey() + " = " + h.getValue() + "\r\n");
             }
-            buf.append("\r\n");
+            buf.append("\r\n");*/
 
             if (request.isChunked()) {
                 readingChunks = true;
             } else {
                 ChannelBuffer content = request.getContent();
-                if (content.readable()) {
+                /*if (content.readable()) {
                     buf.append("CONTENT: " + content.toString(CharsetUtil.UTF_8) + "\r\n");
-                }
+                }*/
                 writeResponse(e,statusCode);
             }
         } else {
             HttpChunk chunk = (HttpChunk) e.getMessage();
             if (chunk.isLast()) {
                 readingChunks = false;
-                buf.append("END OF CONTENT\r\n");
+                /*buf.append("END OF CONTENT\r\n");*/
 
                 HttpChunkTrailer trailer = (HttpChunkTrailer) chunk;
-                if (!trailer.getHeaderNames().isEmpty()) {
+                /*if (!trailer.getHeaderNames().isEmpty()) {
                     buf.append("\r\n");
                     for (String name : trailer.getHeaderNames()) {
                         for (String value : trailer.getHeaders(name)) {
@@ -108,11 +112,11 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
                         }
                     }
                     buf.append("\r\n");
-                }
+                }*/
 
                 writeResponse(e, OK);
             } else {
-                buf.append("CHUNK: " + chunk.getContent().toString(CharsetUtil.UTF_8) + "\r\n");
+                /*buf.append("CHUNK: " + chunk.getContent().toString(CharsetUtil.UTF_8) + "\r\n");*/
             }
         }
     }
