@@ -54,14 +54,12 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
 
             buf.setLength(0);
 
-            /*buf.setLength(0);
-            buf.append("WELCOME TO THE jhttpd WEB SERVER\r\n");
-            buf.append("===================================\r\n");
+            Logger.log("jhttpd web server");
+            Logger.log("VERSION: " + request.getProtocolVersion());
+            Logger.log("HOSTNAME: " + getHost(request, "unknown"));
+            Logger.log("REQUEST_URI: " + request.getUri());
+            
 
-            buf.append("VERSION: " + request.getProtocolVersion() + "\r\n");
-            buf.append("HOSTNAME: " + getHost(request, "unknown") + "\r\n");
-            buf.append("REQUEST_URI: " + request.getUri() + "\r\n\r\n");
-*/
             String requestFileName = request.getUri();
 
             contentType = guessContentType(requestFileName);
@@ -83,18 +81,20 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
 
 
 
-            /*for (Map.Entry<String, String> h : request.getHeaders()) {
-                buf.append("HEADER: " + h.getKey() + " = " + h.getValue() + "\r\n");
+            for (Map.Entry<String, String> h : request.getHeaders()) {
+                Logger.log("HEADER: " + h.getKey() + " = " + h.getValue());
+                
             }
-            buf.append("\r\n");*/
+
 
             if (request.isChunked()) {
                 readingChunks = true;
             } else {
                 ChannelBuffer content = request.getContent();
-                /*if (content.readable()) {
-                    buf.append("CONTENT: " + content.toString(CharsetUtil.UTF_8) + "\r\n");
-                }*/
+                if (content.readable()) {
+                    Logger.log("CONTENT: " + content.toString(CharsetUtil.UTF_8));
+                    
+                }
                 writeResponse(e,statusCode);
             }
         } else {
