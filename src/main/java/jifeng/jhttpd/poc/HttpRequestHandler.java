@@ -31,7 +31,7 @@ public class HttpRequestHandler extends SimpleChannelUpstreamHandler {
 
     //private String htdocs = "/home/jifzh/jifeng/pj/jhttpd/wwwhome";
 
-    private String htdocs = "/Users/jifeng/Sites";
+    private String htdocs = "/var/www";
 
 
     private String contentType;
